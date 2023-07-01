@@ -1,4 +1,4 @@
-import { assert, defaultConpare } from "../util.ts";
+import { assert, defaultCompare } from "../util.ts";
 
 /** `[ルート要素, 高さ, 大きさ, 左の子, 右の子]` */
 type NonNullNode<T> = [T, number, number, Node<T>, Node<T>];
@@ -289,7 +289,7 @@ export class AVLTree<T> implements Set<T> {
   /**
    * @param compareFunc 比較に用いる関数
    */
-  constructor(compareFunc: (a: T, b: T) => number = defaultConpare) {
+  constructor(compareFunc: (a: T, b: T) => number = defaultCompare) {
     this.#compare = compareFunc;
   }
 

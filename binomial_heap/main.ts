@@ -1,4 +1,4 @@
-import { defaultConpare, type Heap } from "../util.ts";
+import { defaultCompare, type Heap } from "../util.ts";
 
 type BinomialTree<T> = [T, ...BinomialTree<T>[]];
 
@@ -17,7 +17,7 @@ export class BinomialHeap<T> implements Heap<T> {
   /**
    * @param compareFunc 比較に用いる関数
    */
-  constructor(compareFunc: (a: T, b: T) => number = defaultConpare) {
+  constructor(compareFunc: (a: T, b: T) => number = defaultCompare) {
     this.#compare = compareFunc;
   }
 

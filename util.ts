@@ -1,7 +1,7 @@
 /**
  * ヒープとかのデフォルトの比較する関数。
  */
-export function defaultConpare<T>(a: T, b: T): number {
+export function defaultCompare<T>(a: T, b: T): number {
   if (a > b) {
     return 1;
   }

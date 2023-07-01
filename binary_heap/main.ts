@@ -1,4 +1,4 @@
-import { defaultConpare, type Heap, type IndexedHeap } from "../util.ts";
+import { defaultCompare, type Heap, type IndexedHeap } from "../util.ts";
 
 /**
  * 二分ヒープの実装。デフォルトではmin-heapになっている
@@ -14,7 +14,7 @@ export class BinaryHeap<T> implements Heap<T> {
   /**
    * @param compareFunc 比較に用いる関数
    */
-  constructor(compareFunc: (a: T, b: T) => number = defaultConpare) {
+  constructor(compareFunc: (a: T, b: T) => number = defaultCompare) {
     this.#compare = compareFunc;
   }
 
@@ -116,7 +116,7 @@ export class IndexedBinaryHeap<T> implements IndexedHeap<T> {
 
   constructor(
     length: number,
-    compareFunc: (a: T, b: T) => number = defaultConpare,
+    compareFunc: (a: T, b: T) => number = defaultCompare,
   ) {
     this.#compare = compareFunc;
 
