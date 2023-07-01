@@ -11,3 +11,4 @@ export * from "./radix_heap/main.ts";
 export * from "./segment_tree/main.ts";
 export * from "./sparse_table/main.ts";
 export * from "./union_find/main.ts";
+export * from "./z_algo/main.ts";
