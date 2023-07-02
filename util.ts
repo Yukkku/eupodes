@@ -14,7 +14,7 @@ export function defaultCompare<T>(a: T, b: T): number {
 /**
  * アサ―ト関数。TypeScriptの型を制御するのに使う。
  */
-export function assert(condition: boolean): asserts condition {
+export function assert(condition: unknown): asserts condition {
   if (!condition) {
     throw new Error("anystisのバグです。私(Yukkku)に連絡ください。");
   }

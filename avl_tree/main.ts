@@ -1,451 +1,238 @@
 import { assert, defaultCompare } from "../util.ts";
 
-/** `[ルート要素, 高さ, 大きさ, 左の子, 右の子]` */
-type NonNullNode<T> = [T, number, number, Node<T>, Node<T>];
-type Node<T> = NonNullNode<T> | null;
+type Node<T> = [T, number, number, Node<T> | null, Node<T> | null];
 
-const add = <T>(
-  node: NonNullNode<T>,
-  val: T,
-  compare: (a: T, b: T) => number,
-): boolean => {
-  const diff = compare(val, node[0]);
+const VALUE = 0;
+const HEIGHT = 1;
+const SIZE = 2;
+const LEFT = 3;
+const RIGHT = 4;
 
-  if (diff > 0) {
-    if (node[4]) {
-      if (add<T>(node[4], val, compare)) return true;
-    } else {
-      node[4] = [
-        val,
-        1,
-        1,
-        null,
-        null,
-      ];
+const set = (node: Node<unknown>) => {
+  node[SIZE] = (node[LEFT]?.[SIZE] ?? 0) + (node[RIGHT]?.[SIZE] ?? 0) + 1;
+  node[HEIGHT] = Math.max(node[LEFT]?.[HEIGHT] ?? 0, node[RIGHT]?.[HEIGHT] ?? 0) + 1;
+};
+
+function lrot (node: Node<unknown>) {
+  assert(node[RIGHT]);
+  node[LEFT] = [
+    /*VALUE: */node[VALUE],
+    0,0,
+    /*LEFT:*/node[LEFT],
+    /*RIGHT:*/node[RIGHT][LEFT],
+  ];
+  set(node[LEFT]);
+
+  node[VALUE] = node[RIGHT][VALUE];
+  node[RIGHT] = node[RIGHT][RIGHT];
+  set(node);
+}
+
+function rrot (node: Node<unknown>) {
+  assert(node[LEFT]);
+  node[RIGHT] = [
+    /*VALUE: */node[VALUE],
+    0,0,
+    /*LEFT:*/node[LEFT][RIGHT],
+    /*RIGHT:*/node[RIGHT],
+  ];
+  set(node[RIGHT]);
+
+  node[VALUE] = node[LEFT][VALUE];
+  node[LEFT] = node[LEFT][LEFT];
+  set(node);
+}
+
+const baranced = (node: Node<unknown>) => {
+  if (!node[RIGHT]) {
+    if (node[LEFT] && node[LEFT][HEIGHT] >= 3) {
+      if (node[LEFT][LEFT] === null) {
+        lrot(node[LEFT]);
+      }
+      rrot(node);
     }
-  } else if (diff < 0) {
-    if (node[3]) {
-      if (add<T>(node[3], val, compare)) return true;
-    } else {
-      node[3] = [
-        val,
-        1,
-        1,
-        null,
-        null,
-      ];
+    return;
+  }
+  if (!node[LEFT]) {
+    if (node[RIGHT][HEIGHT] >= 3) {
+      if (node[RIGHT][RIGHT] === null) {
+        rrot(node[RIGHT]);
+      }
+      lrot(node);
     }
-  } else {
-    return true;
+    return;
   }
 
-  rot(node);
+  const d = node[LEFT][HEIGHT] - node[RIGHT][HEIGHT];
+  if (d >= 2) {
+    assert(node[LEFT][LEFT] && node[LEFT][RIGHT]);
+    if (node[LEFT][LEFT][HEIGHT] < node[LEFT][RIGHT][HEIGHT]) {
+      lrot(node[LEFT]);
+    }
+    rrot(node);
+  } else if (d <= -2) {
+    assert(node[RIGHT][LEFT] && node[RIGHT][RIGHT]);
+    if (node[RIGHT][LEFT][HEIGHT] > node[RIGHT][RIGHT][HEIGHT]) {
+      rrot(node[RIGHT]);
+    }
+    lrot(node);
+  }
+};
 
+const add = <T>(node: Node<T>, val: T, compare: (a: T, b: T) => number): boolean => {
+  const d = compare(val, node[VALUE]);
+  if (d > 0) {
+    if (node[RIGHT] === null) {
+      node[RIGHT] = [val, 1, 1, null, null];
+    } else {
+      if (add(node[RIGHT], val, compare)) {
+        baranced(node);
+      }
+    }
+    return true;
+  } else if (d < 0) {
+    if (node[LEFT] === null) {
+      node[LEFT] = [val, 1, 1, null, null];
+    } else {
+      if (add(node[LEFT], val, compare)) {
+        baranced(node);
+      }
+    }
+    return true;
+  }
   return false;
 };
 
-const del = <T>(
-  node: NonNullNode<T>,
-  val: T,
-  compare: (a: T, b: T) => number,
-): boolean => {
-  const diff = compare(val, node[0]);
-
-  if (diff > 0) {
-    if (node[4]) {
-      if (node[4][2] === 1) {
-        if (compare(node[4][0], val) == 0) {
-          node[4] = null;
-        } else {
-          return false;
-        }
-      } else {
-        if (!del(node[4], val, compare)) return false;
-      }
-    } else {
-      return false;
+const at = <T>(node: Node<T>, idx: number): T | undefined => {
+  if (node[LEFT]) {
+    if (idx < node[LEFT][SIZE]) {
+      return at(node[LEFT], idx);
     }
-  } else if (diff < 0) {
-    if (node[3]) {
-      if (node[3][2] === 1) {
-        if (compare(node[3][0], val) == 0) {
-          node[3] = null;
-        } else {
-          return false;
-        }
-      } else {
-        if (!del(node[3], val, compare)) return false;
-      }
-    } else {
-      return false;
+    if (idx === node[LEFT][SIZE]) {
+      return node[VALUE];
+    }
+    if (node[RIGHT]) {
+      return at(node[RIGHT], idx - node[LEFT][HEIGHT] - 1);
     }
   } else {
-    if (node[4]) {
-      if (node[4][2] === 1) {
-        node[0] = node[4][0];
-        node[4] = null;
-      } else {
-        node[0] = delAt(node[4], 0);
-      }
-    } else if (node[3]) {
-      node[0] = node[3][0];
-      node[3] = null;
-    } else {
-      return true;
+    if (idx === 0) return node[VALUE];
+    if (node[RIGHT]) {
+      return at(node[RIGHT], idx - 1);
     }
   }
-
-  rot(node);
-  return true;
 };
 
-function delAt<T>(node: NonNullNode<T>, idx: 0): T;
-function delAt<T>(node: NonNullNode<T>, idx: -1): T;
-function delAt<T>(node: null, idx: number): undefined;
-function delAt<T>(node: NonNullNode<T>, idx: number): T | undefined;
-function delAt<T>(node: Node<T>, idx: number): T | undefined {
-  if (node === null) {
-    return;
-  }
-
-  if (idx < 0) {
-    idx += node[2];
-
-    if (idx < 0) return;
-  }
-
-  let retVal: T | undefined;
-  const lSize = node[3]?.[2] ?? 0;
-
-  if (idx > lSize) {
-    if (node[4]) {
-      if (node[4][2] === 1) {
-        if (idx === lSize + 1) {
-          retVal = node[4][0];
-          node[4] = null;
-        } else {
-          return;
-        }
-      } else {
-        retVal = delAt(node[4], idx - lSize - 1);
-      }
-    } else {
-      return;
+const del = <T>(node: Node<T>, idx: number): T | undefined => {
+  if (node[LEFT]) {
+    if (idx < node[LEFT][SIZE]) {
+      const retVal = del(node[LEFT], idx);
+      if (node[LEFT][SIZE] === 0) node[LEFT] = null;
+      baranced(node);
+      return retVal;
     }
-  } else if (idx < lSize) {
-    if (node[3]) {
-      if (node[3][2] === 1) {
-        if (idx === 0) {
-          retVal = node[3][0];
-          node[3] = null;
-        } else {
-          return;
-        }
-      } else {
-        retVal = delAt(node[3], idx);
-      }
-    } else {
-      return;
+    if (idx === node[LEFT][SIZE]) {
+      const retVal = node[VALUE];
+      node[VALUE] = del(node[LEFT], node[LEFT][SIZE] - 1) as T;
+      if (node[LEFT][SIZE] === 0) node[LEFT] = null;
+      baranced(node);
+      return retVal;
+    }
+    if (node[RIGHT]) {
+      const retVal = del(node[RIGHT], idx - node[LEFT][SIZE] - 1);
+      if (node[RIGHT][SIZE] === 0) node[RIGHT] = null;
+      baranced(node);
+      return retVal;
     }
   } else {
-    if (node[4]) {
-      retVal = node[0];
-      if (node[4][2] === 1) {
-        node[0] = node[4][0];
-        node[4] = null;
+    if (idx === 0) {
+      const retVal = node[VALUE];
+      if (node[RIGHT]) {
+        node[VALUE] = node[RIGHT][VALUE];
+        node[SIZE] = node[RIGHT][SIZE];
+        node[HEIGHT] = node[RIGHT][HEIGHT];
+        node[LEFT] = node[RIGHT][LEFT];
+        node[RIGHT] = node[RIGHT][RIGHT];
       } else {
-        node[0] = delAt(node[4], 0);
+        node[SIZE] = 0;
       }
-    } else if (node[3]) {
-      node[0] = node[3][0];
-      node[3] = null;
-    } else {
-      return node[0];
+      return retVal;
+    }
+    if (node[RIGHT]) {
+      const retVal = del(node[RIGHT], idx);
+      if (node[RIGHT][SIZE] === 0) node[RIGHT] = null;
+      baranced(node);
+      return retVal;
     }
   }
+};
 
-  rot(node);
-  return retVal;
+function *forEach <T>(node: Node<T>): Generator<T, void, unknown> {
+  if (node[LEFT]) yield* forEach(node[LEFT]);
+  yield node[VALUE];
+  if (node[RIGHT]) yield* forEach(node[RIGHT]);
 }
-
-function at<T>(node: Node<T>, idx: number): T | undefined {
-  if (node === null) {
-    return;
-  }
-
-  if (idx < 0) {
-    idx += node[2];
-
-    if (idx < 0) return;
-  }
-
-  const lSize = node[3]?.[2] ?? 0;
-
-  if (idx > lSize) {
-    at(node[4], idx - lSize - 1);
-  } else if (idx < lSize) {
-    at(node[3], idx);
-  } else {
-    return node[0];
-  }
-}
-
-const has = <T>(
-  node: Node<T>,
-  val: T,
-  compare: (a: T, b: T) => number,
-): boolean => {
-  if (node === null) {
-    return false;
-  }
-
-  const diff = compare(val, node[0]);
-
-  if (diff > 0) {
-    return has<T>(node[4], val, compare);
-  } else if (diff < 0) {
-    return has<T>(node[3], val, compare);
-  } else {
-    return true;
-  }
-};
-
-const rot = <T>(node: NonNullNode<T>) => {
-  const heightDiff = (node[3]?.[1] ?? 0) - (node[4]?.[1] ?? 0);
-
-  if (heightDiff > 1) {
-    assert(node[3] !== null);
-    const lHeightDiff = (node[3][3]?.[1] ?? 0) - (node[3][4]?.[1] ?? 0);
-
-    if (lHeightDiff < 0) {
-      assert(node[3][4] !== null);
-      // lr case
-      node[4] = [
-        node[0],
-        Math.max(node[3][4][4]?.[1] ?? 0, node[4]?.[1] ?? 0) + 1,
-        (node[3][4][4]?.[2] ?? 0) + (node[4]?.[2] ?? 0) + 1,
-        node[3][4][4],
-        node[4],
-      ];
-      node[0] = node[3][4][0];
-      node[3][1] -= 1;
-      node[3][2] -= (node[3][4][4]?.[2] ?? 0) + 1;
-      node[3][4] = node[3][4][3];
-    } else {
-      // ll case
-      node[4] = [
-        node[0],
-        Math.max(node[3][4]?.[1] ?? 0, node[4]?.[1] ?? 0) + 1,
-        (node[3][4]?.[2] ?? 0) + (node[4]?.[2] ?? 0) + 1,
-        node[3][4],
-        node[4],
-      ];
-      node[0] = node[3][0];
-      node[3] = node[3][3];
-    }
-  } else if (heightDiff < -1) {
-    assert(node[4] !== null);
-    const rHeightDiff = (node[4][3]?.[1] ?? 0) - (node[4][4]?.[1] ?? 0);
-
-    if (rHeightDiff > 0) {
-      assert(node[4][3] !== null);
-      // rl case
-      node[3] = [
-        node[0],
-        Math.max(node[3]?.[1] ?? 0, node[4][3][3]?.[1] ?? 0) + 1,
-        (node[3]?.[2] ?? 0) + (node[4][3][3]?.[2] ?? 0) + 1,
-        node[3],
-        node[4][3][3],
-      ];
-      node[0] = node[4][3][0];
-      node[4][1] -= 1;
-      node[4][2] -= (node[4][3][3]?.[2] ?? 0) + 1;
-      node[4][3] = node[4][3][4];
-    } else {
-      // rr case
-      node[3] = [
-        node[0],
-        Math.max(node[3]?.[1] ?? 0, node[4][3]?.[1] ?? 0) + 1,
-        (node[3]?.[2] ?? 0) + (node[4][3]?.[2] ?? 0) + 1,
-        node[3],
-        node[4][3],
-      ];
-      node[0] = node[4][0];
-      node[4] = node[4][4];
-    }
-  }
-
-  node[1] = Math.max(node[3]?.[1] ?? 0, node[4]?.[1] ?? 0) + 1;
-  node[2] = (node[3]?.[2] ?? 0) + (node[4]?.[2] ?? 0) + 1;
-};
 
 /**
  * AVL Treeの実装
  */
-export class AVLTree<T> implements Set<T> {
-  #root: Node<T> = null;
+export class AVLTree<T> {
   #compare: (a: T, b: T) => number;
-
+  #root: Node<T> | null = null;
   /**
-   * @param compareFunc 比較に用いる関数
+   * @param compare 比較する関数
    */
-  constructor(compareFunc: (a: T, b: T) => number = defaultCompare) {
-    this.#compare = compareFunc;
+  constructor (compare: (a: T, b: T) => number = defaultCompare) {
+    this.#compare = compare;
   }
 
   /**
    * 要素を挿入する
-   * @param value 追加する要素
+   * @param value 対象の要素
+   * @returns `this`
    */
-  add(value: T) {
-    if (!this.#root) {
+  add(value: T): this {
+    if (this.#root) {
+      add(this.#root, value, this.#compare);
+    } else {
       this.#root = [value, 1, 1, null, null];
-      return this;
     }
-
-    add<T>(this.#root, value, this.#compare);
-
     return this;
   }
 
   /**
-   * 要素を全て削除する
-   */
-  clear() {
-    this.#root = null;
-  }
-
-  /**
-   * 要素を削除する
-   * @param value 削除する要素
-   * @returns 要素があって削除できたならtrue、そうでなければfalse
-   */
-  delete(value: T): boolean {
-    if (this.#root) {
-      if (this.#root[2] === 1) {
-        if (this.#compare(this.#root[0], value) == 0) {
-          this.#root = null;
-          return true;
-        }
-
-        return false;
-      }
-
-      return del(this.#root, value, this.#compare);
-    }
-
-    return false;
-  }
-
-  /**
-   * 要素を繰り返す
-   * @param callbackfn 繰り返す関数
-   * @param thisArg callbackfnのthis
-   */
-  forEach(
-    callbackfn: (value: T, value2: T, set: Set<T>) => void,
-    thisArg?: unknown,
-  ): void {
-    for (const val of this[Symbol.iterator]()) {
-      callbackfn.call(thisArg, val, val, this);
-    }
-  }
-
-  /**
-   * 要素が含まれるか判定する
-   * @param value 調べる要素
-   * @returns 含まれるならtrue、含まれないならfalse
-   */
-  has(value: T): boolean {
-    return has(this.#root, value, this.#compare);
-  }
-
-  /**
-   * 要素数を取得する
-   */
-  get size() {
-    return this.#root?.[2] ?? 0;
-  }
-
-  *entries(): IterableIterator<[T, T]> {
-    for (const val of this[Symbol.iterator]()) {
-      yield [val, val];
-    }
-  }
-
-  keys(): IterableIterator<T> {
-    return this[Symbol.iterator]();
-  }
-
-  values(): IterableIterator<T> {
-    return this[Symbol.iterator]();
-  }
-
-  *[Symbol.iterator]() {
-    const n = [this.#root];
-    const m = [0];
-    let i = 0;
-
-    while (n.length > 0) {
-      m[i] += 1;
-      const q = n[i];
-
-      if (q === null) {
-        n.pop();
-        m.pop();
-        i -= 1;
-      } else {
-        if (m[i] === 1) {
-          n.push(q[3]);
-          m.push(0);
-          i += 1;
-        } else if (m[i] === 2) {
-          yield q[0];
-          n.push(q[4]);
-          m.push(0);
-          i += 1;
-        } else {
-          n.pop();
-          m.pop();
-          i -= 1;
-        }
-      }
-    }
-  }
-
-  get [Symbol.toStringTag]() {
-    return "AVLTree";
-  }
-
-  /**
-   * indexに対応する要素を取得する
-   * @param index 対象のindex
-   * @returns
+   * index+1番目の要素を調べる
+   * @param index 要素のindex
+   * @returns その要素。無い場合はundefined
    */
   at(index: number): T | undefined {
-    return at(this.#root, index);
+    if (this.#root) {
+      return at(this.#root, index);
+    }
   }
 
   /**
-   * indexに対応する要素を削除する
-   * @param index 対象のindex
-   * @returns 削除した要素、または`undefined`
+   * index+1番目の要素を削除する
+   * @param index 要素のindex
+   * @returns 削除した要素。要素が最初から無かった場合はundefined
    */
-  deleteAt(index: number): T | undefined {
+  delete (index: number): T | undefined {
     if (this.#root) {
-      if (this.#root[2] === 1) {
-        if (index === 0 || index === -1) {
-          const retVal = this.#root[0];
-          this.#root = null;
-          return retVal;
-        }
-
-        return;
-      }
-
-      return delAt(this.#root, index);
+      const retVal = del(this.#root, index);
+      if (this.#root[SIZE] === 0) this.#root = null;
+      return retVal;
     }
+  }
 
-    return;
+  /**
+   * 要素を順番に反復する
+   * @param callbackfn 反復する関数
+   * @param thisArg `callbackfn`の`this`
+   */
+  forEach(callbackfn: (value: T, index: number, avlTree: AVLTree<T>) => void, thisArg?: unknown): void {
+    if (!this.#root) return;
+    let i = 0;
+    for (const v of forEach(this.#root)) {
+      callbackfn.call(thisArg, v, i++, this);
+    }
   }
 }
