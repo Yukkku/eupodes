@@ -163,18 +163,31 @@ export class IndexedRadixHeap implements IndexedHeap<number> {
     }
   }
 
+  /** 値が存在している要素の個数 */
   get size() {
     return this.#size;
   }
 
+  /** indexの最大値-1 */
   get length() {
     return this.#vals.length;
   }
 
+  /**
+   * 要素の値を取得する
+   * @param index 対象のindex
+   * @returns `index`に対応する要素(存在しないならundefined)
+   */
   get(index: number): number | undefined {
     return this.#vals[index];
   }
 
+  /**
+   * 要素の値を設定する
+   * @param index 対象のindex
+   * @param value 設定したい値
+   * @returns 書き換えが可能だったか
+   */
   set(index: number, value: number): boolean {
     const beforeVal = this.#vals[index];
 
@@ -197,16 +210,30 @@ export class IndexedRadixHeap implements IndexedHeap<number> {
     return false;
   }
 
+  /**
+   * 最小の要素を返す
+   * @returns [最小要素のindex, 最小要素の値]
+   */
   find(): [number, number] | undefined {
     if (this.#size > 0) {
       return [this.#minidx, this.#min];
     }
   }
 
+  /**
+   * indexに対応する値があるかどうか返す
+   * @param index 対象のindex
+   * @returns indexに値が紐づけされてるか否か
+   */
   has(index: number): boolean {
     return this.#vals[index] !== undefined;
   }
 
+  /**
+   * indexに対応した値を削除する
+   * @param index 対象のindex
+   * @returns 削除する前に値はあったか否か
+   */
   delete(index: number): boolean {
     if (this.#vals[index] === undefined) {
       return false;
@@ -221,6 +248,10 @@ export class IndexedRadixHeap implements IndexedHeap<number> {
     return true;
   }
 
+  /**
+   * 最小の要素を削除する
+   * @returns [最小要素のindex, 最小要素の値]
+   */
   pop(): [number, number] | undefined {
     if (this.#size === 0) return;
     const retVal: [number, number] = [this.#minidx, this.#min];

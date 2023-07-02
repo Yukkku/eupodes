@@ -126,17 +126,30 @@ export class IndexedBinaryHeap<T> implements IndexedHeap<T> {
     }
   }
 
+  /** 値が存在している要素の個数 */
   get size() {
     return this.#tree.length - 1;
   }
+  /** indexの最大値-1 */
   get length() {
     return this.#values.length;
   }
 
+  /**
+   * 要素の値を取得する
+   * @param index 対象のindex
+   * @returns `index`に対応する要素(存在しないならundefined)
+   */
   get(index: number): T | undefined {
     return this.#values[index];
   }
 
+  /**
+   * 要素の値を設定する
+   * @param index 対象のindex
+   * @param value 設定したい値
+   * @returns `true`
+   */
   set(index: number, value: T): true {
     if (this.#points[index] === 0) {
       const point = this.#tree.length;
@@ -159,6 +172,9 @@ export class IndexedBinaryHeap<T> implements IndexedHeap<T> {
     return true;
   }
 
+  /**
+   * 要素を全て削除して初期化する
+   */
   clear() {
     const length = this.#values.length;
     this.#tree = [0];
@@ -171,6 +187,11 @@ export class IndexedBinaryHeap<T> implements IndexedHeap<T> {
     }
   }
 
+  /**
+   * indexに対応した値を削除する
+   * @param index 対象のindex
+   * @returns 削除する前に値はあったか否か
+   */
   delete(index: number): boolean {
     const point = this.#points[index];
 
@@ -191,6 +212,11 @@ export class IndexedBinaryHeap<T> implements IndexedHeap<T> {
     return false;
   }
 
+  /**
+   * indexに対応する値があるかどうか返す
+   * @param index 対象のindex
+   * @returns indexに値が紐づけされてるか否か
+   */
   has(index: number): boolean {
     if (this.#points[index]) {
       return true;
@@ -199,6 +225,10 @@ export class IndexedBinaryHeap<T> implements IndexedHeap<T> {
     return false;
   }
 
+  /**
+   * 最優先の要素を返す
+   * @returns [最優先要素のindex, 最優先要素の値]
+   */
   find(): [number, T] | undefined {
     const idx = this.#tree[1];
     if (idx !== undefined) {
@@ -206,6 +236,10 @@ export class IndexedBinaryHeap<T> implements IndexedHeap<T> {
     }
   }
 
+  /**
+   * 最優先の要素を削除する
+   * @returns [最優先要素のindex, 最優先要素の値]
+   */
   pop(): [number, T] | undefined {
     const idx = this.#tree[1];
     if (idx === undefined) return;

@@ -11,6 +11,7 @@ export class Kruskal implements WeightedGraph {
     this.#size = size;
   }
 
+  /** 頂点数を返す */
   get size() {
     return this.#size;
   }
@@ -26,8 +27,8 @@ export class Kruskal implements WeightedGraph {
   }
 
   /**
-   * 最小全域木を構成する
-   * @return 最小全域木の辺(に振られた番号)の`Set`
+   * 最小全域森を構成する
+   * @return 最小全域森の辺(に振られた番号)の`Set`
    */
   mst() {
     const ec = this.#u.length;

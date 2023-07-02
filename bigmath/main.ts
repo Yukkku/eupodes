@@ -1,3 +1,6 @@
+/**
+ * `Math`の`BigInt`版
+ */
 export const BigMath = {
   abs(x: bigint): bigint {
     if (x < 0n) return -x;
