@@ -236,7 +236,7 @@ export class IndexedRadixHeap implements IndexedHeap<number> {
 
     for (const idx of this.#idxs[v]) {
       const val = this.#vals[idx];
-      if (val === undefined) return;
+      if (val === undefined) continue;
 
       this.#idxs[bsr(this.#last, val)].push(idx);
       found = true;
@@ -265,7 +265,7 @@ export class IndexedRadixHeap implements IndexedHeap<number> {
 
       for (const idx of idxs) {
         const val = this.#vals[idx];
-        if (val === undefined) return;
+        if (val === undefined) continue;
 
         nee.push(idx);
 
