@@ -286,9 +286,4 @@ export class LagySegmentTree<T, U> {
       this.#data[(index << 1) + 1],
     );
   }
-
-  debug() {
-    console.log(this.#data);
-    console.log(this.#lagy);
-  }
 }
