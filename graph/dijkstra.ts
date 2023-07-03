@@ -46,7 +46,7 @@ export class Dijkstra implements WeightedGraph {
    */
   distance(from?: number): number[];
   /**
-   * 頂点`from`から`to`への距離の集合を返す
+   * 頂点`from`から`to`への距離を返す
    * @param from 始点
    * @param to 終点
    * @return `from`から`to`への最短経路の長さ
