@@ -1,7 +1,7 @@
 import { type Heap, type IndexedHeap } from "../util.ts";
 
 /**
- * ```wasm
+ * ```wat
  * (module
  *   (func (export "bsr") (param f64 f64) (result i32)
  *     i32.const 64

@@ -10,16 +10,18 @@ const RIGHT = 4;
 
 const set = (node: Node<unknown>) => {
   node[SIZE] = (node[LEFT]?.[SIZE] ?? 0) + (node[RIGHT]?.[SIZE] ?? 0) + 1;
-  node[HEIGHT] = Math.max(node[LEFT]?.[HEIGHT] ?? 0, node[RIGHT]?.[HEIGHT] ?? 0) + 1;
+  node[HEIGHT] =
+    Math.max(node[LEFT]?.[HEIGHT] ?? 0, node[RIGHT]?.[HEIGHT] ?? 0) + 1;
 };
 
-function lrot (node: Node<unknown>) {
+function lrot(node: Node<unknown>) {
   assert(node[RIGHT]);
   node[LEFT] = [
-    /*VALUE: */node[VALUE],
-    0,0,
-    /*LEFT:*/node[LEFT],
-    /*RIGHT:*/node[RIGHT][LEFT],
+    /*VALUE: */ node[VALUE],
+    0,
+    0,
+    /*LEFT:*/ node[LEFT],
+    /*RIGHT:*/ node[RIGHT][LEFT],
   ];
   set(node[LEFT]);
 
@@ -28,13 +30,14 @@ function lrot (node: Node<unknown>) {
   set(node);
 }
 
-function rrot (node: Node<unknown>) {
+function rrot(node: Node<unknown>) {
   assert(node[LEFT]);
   node[RIGHT] = [
-    /*VALUE: */node[VALUE],
-    0,0,
-    /*LEFT:*/node[LEFT][RIGHT],
-    /*RIGHT:*/node[RIGHT],
+    /*VALUE: */ node[VALUE],
+    0,
+    0,
+    /*LEFT:*/ node[LEFT][RIGHT],
+    /*RIGHT:*/ node[RIGHT],
   ];
   set(node[RIGHT]);
 
@@ -79,7 +82,11 @@ const baranced = (node: Node<unknown>) => {
   }
 };
 
-const add = <T>(node: Node<T>, val: T, compare: (a: T, b: T) => number): boolean => {
+const add = <T>(
+  node: Node<T>,
+  val: T,
+  compare: (a: T, b: T) => number,
+): boolean => {
   const d = compare(val, node[VALUE]);
   if (d > 0) {
     if (node[RIGHT] === null) {
@@ -166,7 +173,7 @@ const del = <T>(node: Node<T>, idx: number): T | undefined => {
   }
 };
 
-function *forEach <T>(node: Node<T>): Generator<T, void, unknown> {
+function* forEach<T>(node: Node<T>): Generator<T, void, unknown> {
   if (node[LEFT]) yield* forEach(node[LEFT]);
   yield node[VALUE];
   if (node[RIGHT]) yield* forEach(node[RIGHT]);
@@ -181,7 +188,7 @@ export class AVLTree<T> {
   /**
    * @param compare 比較する関数
    */
-  constructor (compare: (a: T, b: T) => number = defaultCompare) {
+  constructor(compare: (a: T, b: T) => number = defaultCompare) {
     this.#compare = compare;
   }
 
@@ -215,7 +222,7 @@ export class AVLTree<T> {
    * @param index 要素のindex
    * @returns 削除した要素。要素が最初から無かった場合はundefined
    */
-  delete (index: number): T | undefined {
+  delete(index: number): T | undefined {
     if (this.#root) {
       const retVal = del(this.#root, index);
       if (this.#root[SIZE] === 0) this.#root = null;
@@ -228,7 +235,10 @@ export class AVLTree<T> {
    * @param callbackfn 反復する関数
    * @param thisArg `callbackfn`の`this`
    */
-  forEach(callbackfn: (value: T, index: number, avlTree: AVLTree<T>) => void, thisArg?: unknown): void {
+  forEach(
+    callbackfn: (value: T, index: number, avlTree: AVLTree<T>) => void,
+    thisArg?: unknown,
+  ): void {
     if (!this.#root) return;
     let i = 0;
     for (const v of forEach(this.#root)) {
