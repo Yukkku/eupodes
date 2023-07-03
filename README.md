@@ -1,6 +1,6 @@
-# Anystis
+# Eupodes
 
-`anystis`は私が勝手に作ってるJavaScriptのアルゴリズム・データ構造集です。
+`eupodes`は私が勝手に作ってるJavaScript/TypeScriptのアルゴリズム・データ構造集です。
 
 Deno用なのでNodeでは動かないと思います。
 

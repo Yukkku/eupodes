@@ -16,7 +16,7 @@ export function defaultCompare<T>(a: T, b: T): number {
  */
 export function assert(condition: unknown): asserts condition {
   if (!condition) {
-    throw new Error("anystisのバグです。私(Yukkku)に連絡ください。");
+    throw new Error("Eupodesのバグです。私(Yukkku)に連絡ください。");
   }
 }
 
