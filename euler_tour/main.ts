@@ -2,7 +2,7 @@ export class EulerTour {
   #data: number[] = [];
   #l: number[] = [];
   #r: number[] = [];
-  constructor(edges: [number, number][], root = 0) {
+  constructor(edges: ([number, number]|[number, number, number])[], root = 0) {
     const n = edges.length + 1;
     const adj: number[][] = [];
     const prog: (0 | 1)[] = [];
@@ -51,7 +51,7 @@ export class EulerTour {
    * @returns 含まれるなら`true`、含まれないなら`false`
    */
   inSubtree(u: number, v: number): boolean {
-    return this.#l[u] < this.#l[v] && this.#r[v] < this.#r[u];
+    return this.#l[u] <= this.#l[v] && this.#r[v] <= this.#r[u];
   }
 
   *[Symbol.iterator]() {
