@@ -2,19 +2,30 @@ export class EulerTour {
   #data: number[] = [];
   #l: number[] = [];
   #r: number[] = [];
-  constructor(edges: ([number, number]|[number, number, number])[], root = 0) {
+  #depth: number[] = [];
+  #cost: number[] = [];
+  constructor(
+    edges: ([number, number] | [number, number, number])[],
+    root = 0,
+  ) {
     const n = edges.length + 1;
-    const adj: number[][] = [];
+    const a: number[][] = [];
+    const c: number[][] = [];
     const prog: (0 | 1)[] = [];
     for (let i = 0; i < n; i += 1) {
-      adj.push([]);
+      a.push([]);
+      c.push([]);
       prog.push(0);
       this.#l.push(0);
       this.#r.push(0);
+      this.#depth.push(0);
+      this.#cost.push(0);
     }
     for (const edge of edges) {
-      adj[edge[0]].push(edge[1]);
-      adj[edge[1]].push(edge[0]);
+      a[edge[0]].push(edge[1]);
+      a[edge[1]].push(edge[0]);
+      c[edge[0]].push(edge[2] ?? 1);
+      c[edge[1]].push(edge[2] ?? 1);
     }
     const stack = [root];
     while (stack.length > 0) {
@@ -26,8 +37,12 @@ export class EulerTour {
       }
       this.#l[v] = this.#data.length - 1;
       prog[v] = 1;
-      for (const u of adj[v]) {
+      let i = -1;
+      for (const u of a[v]) {
+        i += 1;
         if (prog[u]) continue;
+        this.#depth[u] = this.#depth[v] + 1;
+        this.#cost[u] = this.#cost[v] + c[v][i];
         stack.push(v);
         stack.push(u);
       }
@@ -52,6 +67,24 @@ export class EulerTour {
    */
   inSubtree(u: number, v: number): boolean {
     return this.#l[u] <= this.#l[v] && this.#r[v] <= this.#r[u];
+  }
+
+  /**
+   * 頂点`v`の深さを返す
+   * @param v 対象の頂点
+   * @returns 根から頂点`v`へのパスに含まれる辺の数
+   */
+  depth(v: number): number {
+    return this.#depth[v];
+  }
+
+  /**
+   * 根から頂点`v`への距離を返す
+   * @param v 対象の頂点
+   * @returns 根から頂点`v`への距離
+   */
+  cost(v: number): number {
+    return this.#cost[v];
   }
 
   *[Symbol.iterator]() {
