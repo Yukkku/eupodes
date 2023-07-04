@@ -92,7 +92,7 @@ export class EulerTour {
    * @param v 対象の頂点
    * @returns [`retVal[0]`, `retVal[1]`)の形の半開区間
    */
-  range (v: number): [number, number] {
+  range(v: number): [number, number] {
     return [this.#l[v], this.#r[v]];
   }
 

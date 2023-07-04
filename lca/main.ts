@@ -35,7 +35,7 @@ export class LCA extends EulerTour {
    * @param v 2つめの頂点の番号
    * @returns 最小共通祖先の番号
    */
-  lca (u: number, v: number): number {
+  lca(u: number, v: number): number {
     if (this.inSubtree(u, v)) return u;
     let y = u;
     for (const p of this.#dup) {
@@ -50,15 +50,15 @@ export class LCA extends EulerTour {
    * @param v 対象の頂点
    * @returns 根から頂点`v`への距離
    */
-  cost (v: number): number;
+  cost(v: number): number;
   /**
    * 頂点`u`から頂点`v`への距離を返す
    * @param u 1つめの頂点
    * @param v 2つめの頂点
    * @returns 頂点`u`,`v`間の距離
    */
-  cost (u: number, v: number): number;
-  cost (u: number, v?: number): number {
+  cost(u: number, v: number): number;
+  cost(u: number, v?: number): number {
     if (!v) { // vは0 or undefined.どちらも根からの距離
       return super.cost(u);
     }
