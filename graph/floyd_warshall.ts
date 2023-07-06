@@ -38,9 +38,9 @@ export class FloydWarshall implements WeightedGraph {
    */
   calc (): readonly number[][] {
     const size = this.size;
-    for (let j = 0; j < size; j += 1) {
-      for (let k = 0; k < size; k += 1) {
-        for (let i = 0; i < size; i += 1) {
+    for (let k = 0; k < size; k += 1) {
+      for (let i = 0; i < size; i += 1) {
+        for (let j = 0; j < size; j += 1) {
           const d = this.#d[i][k] + this.#d[k][j];
           if (d < this.#d[i][j]) this.#d[i][j] = d;
         }
