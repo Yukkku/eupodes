@@ -6,6 +6,7 @@ export class SegmentTree<T> {
   #op: (a: T, b: T) => T;
   #data: T[];
   #size: number;
+  #length: number;
 
   /**
    * SegmentTreeは`e`で初期化される
@@ -27,6 +28,7 @@ export class SegmentTree<T> {
     this.#op = op;
 
     if (typeof input === "number") {
+      this.#length = input;
       this.#size = 1;
 
       while (this.#size < input) {
@@ -42,6 +44,7 @@ export class SegmentTree<T> {
       return;
     }
 
+    this.#length = input.length;
     this.#size = 1;
 
     while (this.#size < input.length) {
@@ -122,5 +125,36 @@ export class SegmentTree<T> {
     }
 
     return this.#op(left, right);
+  }
+
+  search (func: (a: T) => boolean, l = 0): number {
+    let i = l + this.#size;
+    let val = this.#e;
+    while (1) {
+      if (i & 1) {
+        const newval = this.#op(val, this.#data[i]);
+        if (func(newval)) {
+          val = newval;
+          i += 1;
+          if ((i & (i - 1)) === 0) {
+            return this.#length;
+          }
+        } else {
+          break;
+        }
+      }
+      i >>= 1;
+    }
+
+    while (i < this.#size) {
+      i <<= 1;
+      const newval = this.#op(val, this.#data[i]);
+      if (func(newval)) {
+        val = newval;
+        i += 1;
+      }
+    }
+
+    return i - this.#size;
   }
 }
