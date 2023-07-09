@@ -38,7 +38,8 @@ export class LCA extends EulerTour {
   lca(u: number, v: number): number {
     if (this.inSubtree(u, v)) return u;
     let y = u;
-    for (const p of this.#dup) {
+    for (let i = 0; i < this.#dup.length; i += 1) {
+      const p = this.#dup[i];
       if (p[y] === -1) continue;
       if (!this.inSubtree(p[y], v)) y = p[y];
     }

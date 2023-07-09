@@ -3,16 +3,18 @@
  */
 export class UnionFind {
   /** 木の親の要素。根の場合は-(木の大きさ)になる */
-  #parent: number[];
+  #parent: number[] = [];
   /** 経路圧縮しなかった場合の木の高さ */
-  #height: number[];
+  #height: number[] = [];
 
   /**
    * @param n 要素数の上限
    */
   constructor(n: number) {
-    this.#parent = [...Array(n)].fill(-1);
-    this.#height = [...Array(n)].fill(1);
+    for (let i = 0; i < n; i += 1) {
+      this.#parent.push(-1);
+      this.#height.push(1);
+    }
   }
 
   /**

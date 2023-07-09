@@ -10,7 +10,8 @@ export class LIS {
    */
   static len<T>(arr: T[], strictly = true) {
     const dp: T[] = [];
-    for (const v of arr) {
+    for (let i = 0; i < arr.length; i += 1) {
+      const v = arr[i];
       let min = -1;
       let max = dp.length;
       while (max - min > 1) {
@@ -36,7 +37,8 @@ export class LIS {
   static lis<T>(arr: T[], strictly = true) {
     const dp: number[] = [];
     const prev: number[] = [];
-    for (const [i, v] of arr.entries()) {
+    for (let i = 0; i < arr.length; i += 1) {
+      const v = arr[i];
       let min = -1;
       let max = dp.length;
       while (max - min > 1) {
@@ -69,7 +71,8 @@ export class LIS {
   static lisIdx<T>(arr: T[], strictly = true) {
     const dp: number[] = [];
     const prev: number[] = [];
-    for (const [i, v] of arr.entries()) {
+    for (let i = 0; i < arr.length; i += 1) {
+      const v = arr[i];
       let min = -1;
       let max = dp.length;
       while (max - min > 1) {

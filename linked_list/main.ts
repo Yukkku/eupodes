@@ -30,7 +30,8 @@ export class LinkedList<T> {
    * @param items 追加する要素。複数指定できます。
    */
   push(...items: T[]) {
-    for (const item of items) {
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
       if (this.#last === null) {
         this.#last = [item, null, null];
         this.#first = this.#last;

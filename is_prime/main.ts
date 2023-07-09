@@ -32,7 +32,7 @@ const powmodBigInt = (a: bigint, b: number, n: bigint): bigint => {
 };
 
 const trialDivision = (n: number): boolean => {
-  for (let i = 3; i ** 2 <= n; i += 1) {
+  for (let i = 3; i ** 2 <= n; i += 2) {
     if (n % i === 0) return false;
   }
 

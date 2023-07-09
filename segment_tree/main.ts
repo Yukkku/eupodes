@@ -57,8 +57,8 @@ export class SegmentTree<T> {
       this.#data.push(e);
     }
 
-    for (const val of input) {
-      this.#data.push(val);
+    for (let i = 0; i < input.length; i += 1) {
+      this.#data.push(input[i]);
     }
 
     for (let i = input.length; i < this.#size; i += 1) {

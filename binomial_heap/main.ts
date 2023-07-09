@@ -29,13 +29,14 @@ export class BinomialHeap<T> implements Heap<T> {
   insert(...items: T[]) {
     this.#size += items.length;
 
-    for (const item of items) {
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
       let v: BinomialTree<T> = [item];
-      let i = 0;
+      let j = 0;
 
-      for (; this.#data[i]; i += 1) {
-        const r = this.#data[i] as BinomialTree<T>;
-        this.#data[i] = undefined;
+      for (; this.#data[j]; j += 1) {
+        const r = this.#data[j] as BinomialTree<T>;
+        this.#data[j] = undefined;
         if (this.#compare(r[0], v[0]) < 0) {
           r.push(v);
           v = r;
@@ -44,7 +45,7 @@ export class BinomialHeap<T> implements Heap<T> {
         }
       }
 
-      this.#data[i] = v;
+      this.#data[j] = v;
     }
 
     return this.#size;

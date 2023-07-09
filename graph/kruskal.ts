@@ -41,7 +41,8 @@ export class Kruskal implements WeightedGraph {
     const uf = new UnionFind(this.#size);
     const retVal: number[] = [];
 
-    for (const c of s) {
+    for (let i = 0; i < s.length; i += 1) {
+      const c = s[i];
       if (!uf.same(this.#u[c], this.#v[c])) {
         uf.marge(this.#u[c], this.#v[c]);
         retVal.push(c);

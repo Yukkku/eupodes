@@ -26,7 +26,8 @@ export const BigMath = {
       throw new Error();
     }
     let ans = values[0];
-    for (const val of values) {
+    for (let i = 0; i < values.length; i += 1) {
+      const val = values[i];
       if (val > ans) ans = val;
     }
     return ans;
@@ -37,7 +38,8 @@ export const BigMath = {
       throw new Error();
     }
     let ans = values[0];
-    for (const val of values) {
+    for (let i = 0; i < values.length; i += 1) {
+      const val = values[i];
       if (val < ans) ans = val;
     }
     return ans;

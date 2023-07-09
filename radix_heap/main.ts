@@ -57,7 +57,8 @@ export class RadixHeap implements Heap<number> {
    * @returns 追加後のヒープの要素数
    */
   insert(...items: number[]): number {
-    for (const item of items) {
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i];
       if (item >= this.#last) {
         this.#values[bsr(item, this.#last)].push(item);
         this.#size += 1;
@@ -100,7 +101,9 @@ export class RadixHeap implements Heap<number> {
     const v = bsr(this.#min, this.#last);
     this.#last = this.#min;
 
-    for (const item of this.#values[v]) {
+    const target = this.#values[v];
+    for (let i = 0; i < target.length; i += 1) {
+      const item = target[i];
       this.#values[bsr(item, this.#last)].push(item);
     }
 
@@ -265,7 +268,9 @@ export class IndexedRadixHeap implements IndexedHeap<number> {
     this.#minidx = -1;
     this.#size -= 1;
 
-    for (const idx of this.#idxs[v]) {
+    const target = this.#idxs[v];
+    for (let i = 0; i < target.length; i += 1) {
+      const idx = target[i];
       const val = this.#vals[idx];
       if (val === undefined) continue;
 
@@ -294,7 +299,8 @@ export class IndexedRadixHeap implements IndexedHeap<number> {
       if (idxs.length === 0) continue;
       const nee: number[] = [];
 
-      for (const idx of idxs) {
+      for (let i = 0; i < idxs.length; i += 1) {
+        const idx = idxs[i];
         const val = this.#vals[idx];
         if (val === undefined) continue;
 

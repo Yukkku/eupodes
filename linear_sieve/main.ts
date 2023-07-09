@@ -12,7 +12,8 @@ export class LinearSieve {
         this.#primes.push(i);
         this.#data[i] = i;
       }
-      for (const p of this.#primes) {
+      for (let i = 0; i < this.#primes.length; i += 1) {
+        const p = this.#primes[i];
         if (p > this.#data[i] || p * i >= n) {
           break;
         }
@@ -58,8 +59,6 @@ export class LinearSieve {
    * n未満の素数を小さい順に吐くイテレータを返す
    */
   *primes() {
-    for (const p of this.#primes) {
-      yield p;
-    }
+    yield* this.#primes;
   }
 }

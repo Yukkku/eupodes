@@ -21,7 +21,8 @@ export class EulerTour {
       this.#depth.push(0);
       this.#cost.push(0);
     }
-    for (const edge of edges) {
+    for (let i = 0; i < edges.length; i += 1) {
+      const edge = edges[i];
       a[edge[0]].push(edge[1]);
       a[edge[1]].push(edge[0]);
       c[edge[0]].push(edge[2] ?? 1);
@@ -37,9 +38,8 @@ export class EulerTour {
       }
       this.#l[v] = this.#data.length - 1;
       prog[v] = 1;
-      let i = -1;
-      for (const u of a[v]) {
-        i += 1;
+      for (let i = 0; i < a[v].length; i += 1) {
+        const u = a[v][i];
         if (prog[u]) continue;
         this.#depth[u] = this.#depth[v] + 1;
         this.#cost[u] = this.#cost[v] + c[v][i];
