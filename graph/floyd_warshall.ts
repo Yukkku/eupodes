@@ -3,7 +3,7 @@ import { WeightedGraph } from "./util.ts";
 export class FloydWarshall implements WeightedGraph {
   #d: number[][] = [];
 
-  constructor (size: number) {
+  constructor(size: number) {
     for (let i = 0; i < size; i += 1) {
       const tmp = [];
       for (let j = 0; j < size; j += 1) {
@@ -36,7 +36,7 @@ export class FloydWarshall implements WeightedGraph {
    * ワーシャルフロイド法を適用する
    * @returns 距離の配列。添え字は`retVal[from][to]`の順
    */
-  calc (): readonly number[][] {
+  calc(): readonly number[][] {
     const size = this.size;
     for (let k = 0; k < size; k += 1) {
       for (let i = 0; i < size; i += 1) {

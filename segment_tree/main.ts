@@ -127,7 +127,7 @@ export class SegmentTree<T> {
     return this.#op(left, right);
   }
 
-  search (func: (a: T) => boolean, l = 0): number {
+  search(func: (a: T) => boolean, l = 0): number {
     let i = l + this.#size;
     let val = this.#e;
     while (1) {
