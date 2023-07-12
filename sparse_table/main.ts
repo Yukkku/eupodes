@@ -9,7 +9,7 @@ export class SparseTable<T> {
    * @param op 使用する演算。結合性と冪等性が必要
    * @param data クエリを適用する配列
    */
-  constructor(op: (a: T, b: T) => T, data: ArrayLike<T>) {
+  constructor(op: (a: T, b: T) => T, data: Readonly<ArrayLike<T>>) {
     this.#table = [];
     this.#op = op;
 

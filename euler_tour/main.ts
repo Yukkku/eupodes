@@ -5,7 +5,7 @@ export class EulerTour {
   #depth: Float64Array;
   #cost: Float64Array;
   constructor(
-    edges: readonly ([number, number] | [number, number, number])[],
+    edges: Readonly<ArrayLike<[number, number] | [number, number, number]>>,
     root = 0,
   ) {
     const n = edges.length + 1;
