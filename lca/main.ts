@@ -3,7 +3,7 @@ import { EulerTour } from "../euler_tour/main.ts";
 export class LCA extends EulerTour {
   #dup: number[][] = [];
   constructor(
-    edges: Readonly<ArrayLike<[number, number] | [number, number, number]>>,
+    edges: ArrayLike<[number, number] | [number, number, number]>,
     root = 0,
   ) {
     const len = edges.length + 1;

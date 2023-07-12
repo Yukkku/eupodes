@@ -3,7 +3,7 @@
  * @param arr 対象の配列
  * @returns `arr`に対するZ array
  */
-export function zAlgo(arr: Readonly<ArrayLike<unknown>>): number[] {
+export function zAlgo(arr: ArrayLike<unknown>): number[] {
   const len = arr.length;
   const z = [0];
   let j = 0;

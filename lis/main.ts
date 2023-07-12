@@ -8,7 +8,7 @@ export class LIS {
    * @param strictly (狭義/広義)短調増加の設定。デフォルトでtrue
    * @returns LISの長さ
    */
-  static len<T>(arr: Readonly<ArrayLike<T>>, strictly = true) {
+  static len<T>(arr: ArrayLike<T>, strictly = true) {
     const dp: T[] = [];
     for (let i = 0; i < arr.length; i += 1) {
       const v = arr[i];
@@ -34,7 +34,7 @@ export class LIS {
    * @param strictly (狭義/広義)短調増加の設定。デフォルトでtrue
    * @returns LIS
    */
-  static lis<T>(arr: Readonly<ArrayLike<T>>, strictly = true) {
+  static lis<T>(arr: ArrayLike<T>, strictly = true) {
     const dp: number[] = [];
     const prev: number[] = [];
     for (let i = 0; i < arr.length; i += 1) {
@@ -68,7 +68,7 @@ export class LIS {
    * @param strictly (狭義/広義)短調増加の設定。デフォルトでtrue
    * @returns LISの各要素のarrでのindexの配列
    */
-  static lisIdx<T>(arr: Readonly<ArrayLike<T>>, strictly = true) {
+  static lisIdx<T>(arr: ArrayLike<T>, strictly = true) {
     const dp: number[] = [];
     const prev: number[] = [];
     for (let i = 0; i < arr.length; i += 1) {
