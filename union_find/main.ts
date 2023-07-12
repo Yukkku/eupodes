@@ -3,13 +3,13 @@
  */
 export class UnionFind {
   /** 木の親の要素。根の場合は-(木の大きさ)になる */
-  #parent: Uint32Array;
+  #parent: Int32Array;
 
   /**
    * @param n 要素数の上限
    */
   constructor(n: number) {
-    this.#parent = new Uint32Array(n).fill(-1);
+    this.#parent = new Int32Array(n).fill(-1);
   }
 
   /**
