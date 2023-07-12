@@ -1,11 +1,9 @@
 export class LinearSieve {
-  #data: number[] = [];
+  #data: Uint32Array;
   #primes: number[] = [];
 
   constructor(n: number) {
-    for (let i = 0; i < n; i += 1) {
-      this.#data.push(0);
-    }
+    this.#data = new Uint32Array(n);
 
     for (let i = 2; i < n; i += 1) {
       if (this.#data[i] === 0) {

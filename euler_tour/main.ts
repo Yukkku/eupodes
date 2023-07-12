@@ -1,9 +1,9 @@
 export class EulerTour {
-  #data: number[] = [];
-  #l: number[] = [];
-  #r: number[] = [];
-  #depth: number[] = [];
-  #cost: number[] = [];
+  #data: Uint32Array;
+  #l: Uint32Array;
+  #r: Uint32Array;
+  #depth: Float64Array;
+  #cost: Float64Array;
   constructor(
     edges: ([number, number] | [number, number, number])[],
     root = 0,
@@ -12,14 +12,14 @@ export class EulerTour {
     const a: number[][] = [];
     const c: number[][] = [];
     const prog: (0 | 1)[] = [];
+    this.#l = new Uint32Array(n);
+    this.#r = new Uint32Array(n);
+    this.#depth = new Float64Array(n);
+    this.#cost = new Float64Array(n);
     for (let i = 0; i < n; i += 1) {
       a.push([]);
       c.push([]);
       prog.push(0);
-      this.#l.push(0);
-      this.#r.push(0);
-      this.#depth.push(0);
-      this.#cost.push(0);
     }
     for (let i = 0; i < edges.length; i += 1) {
       const edge = edges[i];
@@ -29,9 +29,11 @@ export class EulerTour {
       c[edge[1]].push(edge[2] ?? 1);
     }
     const stack = [root];
+    this.#data = new Uint32Array(n * 2 - 1);
+    let i = 0;
     while (stack.length > 0) {
       const v = stack.pop() as number;
-      this.#data.push(v);
+      this.#data[i++] = v;
       this.#r[v] = this.#data.length;
       if (prog[v]) {
         continue;
