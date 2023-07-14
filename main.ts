@@ -3,6 +3,7 @@ export * from "./bigmath/main.ts";
 export * from "./binary_heap/main.ts";
 export * from "./binomial_heap/main.ts";
 export * from "./euler_tour/main.ts";
+export * from "./fft/main.ts";
 export * from "./graph/dijkstra.ts";
 export * from "./graph/floyd_warshall.ts";
 export * from "./graph/kruskal.ts";
