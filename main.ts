@@ -1,3 +1,4 @@
+export * from "./32ary_tree/main.ts";
 export * from "./avl_tree/main.ts";
 export * from "./bigmath/main.ts";
 export * from "./binary_heap/main.ts";
