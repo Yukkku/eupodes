@@ -1,5 +1,5 @@
-import { UnionFind } from "../main.ts";
-import { WeightedGraph } from "./util.ts";
+import { UnionFind } from "../../data_structure/union_find/main.ts";
+import { WeightedGraph } from "../util.ts";
 
 export class Kruskal implements WeightedGraph {
   #u: number[] = [];

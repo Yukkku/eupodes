@@ -1,4 +1,4 @@
-import { type Heap, type IndexedHeap } from "../util.ts";
+import { type Heap, type IndexedHeap } from "../../util.ts";
 
 /**
  * ```wat

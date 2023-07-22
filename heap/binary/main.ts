@@ -1,4 +1,4 @@
-import { defaultCompare, type Heap, type IndexedHeap } from "../util.ts";
+import { defaultCompare, type Heap, type IndexedHeap } from "../../util.ts";
 
 /**
  * 二分ヒープの実装。デフォルトではmin-heapになっている

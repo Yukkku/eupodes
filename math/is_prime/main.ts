@@ -1,4 +1,4 @@
-import { mulmod, powmod } from "../util.ts";
+import { mulmod, powmod } from "../../util.ts";
 
 const powmodBigInt = (a: bigint, b: number, n: bigint): bigint => {
   let ans = 1n;

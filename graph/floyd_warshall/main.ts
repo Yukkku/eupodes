@@ -1,4 +1,4 @@
-import { WeightedGraph } from "./util.ts";
+import { WeightedGraph } from "../util.ts";
 
 export class FloydWarshall implements WeightedGraph {
   #d: number[][] = [];

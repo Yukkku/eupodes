@@ -1,5 +1,5 @@
-import { WeightedGraph } from "./util.ts";
-import { IndexedRadixHeap } from "../radix_heap/main.ts";
+import { WeightedGraph } from "../util.ts";
+import { IndexedRadixHeap } from "../../heap/radix/main.ts";
 
 /**
  * Dijkstra法の実装

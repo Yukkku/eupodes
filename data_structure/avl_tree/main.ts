@@ -1,4 +1,4 @@
-import { assert, defaultCompare } from "../util.ts";
+import { assert, defaultCompare } from "../../util.ts";
 
 type Node<T> = [T, number, number, Node<T> | null, Node<T> | null];
 

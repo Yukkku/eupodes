@@ -1,4 +1,4 @@
-import { defaultCompare, type Heap } from "../util.ts";
+import { defaultCompare, type Heap } from "../../util.ts";
 
 type BinomialTree<T> = [T, ...BinomialTree<T>[]];
 

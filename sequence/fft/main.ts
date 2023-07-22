@@ -1,4 +1,4 @@
-import { mulmod, powmod } from "../util.ts";
+import { mulmod, powmod } from "../../util.ts";
 
 // TODO: 一部をナイーブな実装に置き換えて高速化する
 
