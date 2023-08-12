@@ -34,11 +34,11 @@ export class EulerTour {
     while (stack.length > 0) {
       const v = stack.pop() as number;
       this.#data[i++] = v;
-      this.#r[v] = this.#data.length;
+      this.#r[v] = i;
       if (prog[v]) {
         continue;
       }
-      this.#l[v] = this.#data.length - 1;
+      this.#l[v] = i - 1;
       prog[v] = 1;
       for (let i = 0; i < a[v].length; i += 1) {
         const u = a[v][i];
