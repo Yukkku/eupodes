@@ -1,3 +1,5 @@
+import { indexOfNeedle } from "https://deno.land/std@0.140.0/bytes/mod.ts";
+
 export class EulerTour {
   #data: Uint32Array;
   #l: Uint32Array;
@@ -96,6 +98,17 @@ export class EulerTour {
    */
   range(v: number): [number, number] {
     return [this.#l[v], this.#r[v]];
+  }
+
+  /**
+   * `eulertour.data()[eulertour.data(v)] === v`になるような最小の値を返す
+   */
+  indexOf(v: number): number {
+    return this.#l[v];
+  }
+
+  data(): Readonly<Uint32Array> {
+    return this.#data;
   }
 
   *[Symbol.iterator]() {

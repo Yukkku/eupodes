@@ -1,32 +1,30 @@
 import { EulerTour } from "../euler_tour/main.ts";
 
 export class LCA extends EulerTour {
-  #dup: number[][] = [];
+  #table: Readonly<Uint32Array>[] = [];
+
   constructor(
     edges: ArrayLike<[number, number] | [number, number, number]>,
     root = 0,
   ) {
-    const len = edges.length + 1;
     super(edges, root);
-    let p: number[] = [];
-    for (let i = 0; i < len; i += 1) {
-      p.push(this.parent(i));
-    }
-    this.#dup.push(p);
-    if (len === 1) return;
-    while (1) {
-      const np: number[] = [];
-      let count = 0;
-      for (let i = 0; i < len; i += 1) {
-        const v = p[p[i]] ?? -1;
-        if (v !== -1) count += 1;
-        np.push(v);
+    let last = this.data();
+    let len = 1;
+    this.#table.push(last);
+
+    while (len < last.length) {
+      const n = new Uint32Array(last.length - len);
+
+      for (let i = 0; i < n.length; i += 1) {
+        const a = this.depth(last[i]);
+        const b = this.depth(last[i + len]);
+        n[i] = a < b ? last[i] : last[i + len];
       }
-      if (count === 0) break;
-      this.#dup.push(np);
-      p = np;
+
+      this.#table.push(n);
+      last = n;
+      len <<= 1;
     }
-    this.#dup.reverse();
   }
 
   /**
@@ -36,14 +34,20 @@ export class LCA extends EulerTour {
    * @returns 最小共通祖先の番号
    */
   lca(u: number, v: number): number {
-    if (this.inSubtree(u, v)) return u;
-    let y = u;
-    for (let i = 0; i < this.#dup.length; i += 1) {
-      const p = this.#dup[i];
-      if (p[y] === -1) continue;
-      if (!this.inSubtree(p[y], v)) y = p[y];
+    const uidx = this.indexOf(u);
+    const vidx = this.indexOf(v);
+    const l = uidx > vidx ? vidx : uidx;
+    const r = (uidx < vidx ? vidx : uidx) + 1;
+
+    const i = 31 - Math.clz32(r - l);
+
+    const a = this.#table[i][l];
+    const b = this.#table[i][r - (1 << i)];
+    if (this.depth(a) > this.depth(b)) {
+      return b;
+    } else {
+      return a;
     }
-    return this.parent(y);
   }
 
   /**
