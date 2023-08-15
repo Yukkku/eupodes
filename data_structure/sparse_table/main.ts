@@ -26,7 +26,7 @@ export class SparseTable<T> {
 
       this.#table.push(n);
       last = n;
-      length *= 2;
+      length <<= 1;
     }
   }
 
@@ -38,15 +38,8 @@ export class SparseTable<T> {
    */
   query(bigin: number, end: number): T {
     const w = end - bigin;
-    let i = 0;
-    let j = 2;
-
-    while (j <= w) {
-      i += 1;
-      j *= 2;
-    }
-
-    j /= 2;
+    const i = 31 - Math.clz32(w);
+    const j = 1 << i;
 
     if (j === w) {
       return this.#table[i][bigin];
