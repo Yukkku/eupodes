@@ -4,12 +4,14 @@
 export class UnionFind {
   /** 木の親の要素。根の場合は-(木の大きさ)になる */
   #parent: Int32Array;
+  #connectedCount: number;
 
   /**
    * @param n 要素数の上限
    */
   constructor(n: number) {
     this.#parent = new Int32Array(n).fill(-1);
+    this.#connectedCount = n;
   }
 
   /**
@@ -43,6 +45,8 @@ export class UnionFind {
       return aRoot;
     }
 
+    this.#connectedCount -= 1;
+
     if (this.#parent[aRoot] > this.#parent[bRoot]) {
       this.#parent[bRoot] += this.#parent[aRoot];
       this.#parent[aRoot] = bRoot;
@@ -71,5 +75,9 @@ export class UnionFind {
    */
   same(a: number, b: number): boolean {
     return this.root(a) === this.root(b);
+  }
+
+  get connectedCount(): number {
+    return this.#connectedCount;
   }
 }
