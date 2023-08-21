@@ -1,5 +1,15 @@
 import { assert, defaultCompare } from "../../util.ts";
-import { Node, VALUE, SIZE, RANK, LEFT, RIGHT, nodeMk, nodeBal, nodeIter } from "./base.ts";
+import {
+  LEFT,
+  Node,
+  nodeBal,
+  nodeIter,
+  nodeMk,
+  RANK,
+  RIGHT,
+  SIZE,
+  VALUE,
+} from "./base.ts";
 
 /**
  * 値を追加する
@@ -26,7 +36,11 @@ const nodeAdd = <T>(node: Node<T>, val: T, compare: (a: T, b: T) => number) => {
 /**
  * ただのHas。
  */
-const nodeHas = <T>(node: Node<T>, val: T, compare: (a: T, b: T) => number): boolean => {
+const nodeHas = <T>(
+  node: Node<T>,
+  val: T,
+  compare: (a: T, b: T) => number,
+): boolean => {
   const d = compare(val, node[VALUE]);
   if (d > 0) {
     if (node[RIGHT]) {
@@ -200,7 +214,10 @@ export class AvlSet<T> implements Set<T> {
 
   deleteAt(index: number): T | undefined {
     if (this.#root) {
-      return nodeDelAt(this.#root, index < 0 ? index + this.#root[SIZE] : index);
+      return nodeDelAt(
+        this.#root,
+        index < 0 ? index + this.#root[SIZE] : index,
+      );
     }
   }
 
@@ -251,7 +268,7 @@ export class AvlSet<T> implements Set<T> {
       return nodeIter(this.#root);
     }
 
-    return (function*(){})();
+    return (function* () {})();
   }
 
   get [Symbol.toStringTag]() {

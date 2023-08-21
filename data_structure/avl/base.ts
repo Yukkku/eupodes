@@ -90,7 +90,7 @@ export const nodeBal = (node: Node<unknown>) => {
   }
 };
 
-export function *nodeIter <T>(node: Node<T>) {
+export function* nodeIter<T>(node: Node<T>) {
   const s = [node];
   const m: (0 | 1)[] = [0];
   while (s.length) {
