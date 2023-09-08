@@ -1,5 +1,3 @@
-import { indexOfNeedle } from "https://deno.land/std@0.140.0/bytes/mod.ts";
-
 export class EulerTour {
   #data: Uint32Array;
   #l: Uint32Array;
