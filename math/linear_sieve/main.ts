@@ -10,8 +10,8 @@ export class LinearSieve {
         this.#primes.push(i);
         this.#data[i] = i;
       }
-      for (let i = 0; i < this.#primes.length; i += 1) {
-        const p = this.#primes[i];
+      for (let j = 0; j < this.#primes.length; j += 1) {
+        const p = this.#primes[j];
         if (p > this.#data[i] || p * i >= n) {
           break;
         }
