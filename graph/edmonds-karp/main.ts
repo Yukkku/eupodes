@@ -1,7 +1,7 @@
 import { WeightedGraph } from "../util.ts";
 
 /** 最上位ビットだけ1 */
-const TOP = 1<<31;
+const TOP = 1 << 31;
 
 export class EdmondsKarp implements WeightedGraph {
   #edge: number[][] = [];
@@ -9,13 +9,13 @@ export class EdmondsKarp implements WeightedGraph {
   #cap: number[] = [];
   #dir: boolean[] = [];
 
-  constructor (size: number) {
+  constructor(size: number) {
     for (let i = 0; i < size; i += 1) {
       this.#edge.push([]);
     }
   }
 
-  get size () {
+  get size() {
     return this.#edge.length;
   }
 
@@ -94,7 +94,7 @@ export class EdmondsKarp implements WeightedGraph {
         }
       }
       if (lim === 0) {
-        throw new Error('Bug!!');
+        throw new Error("Bug!!");
       }
       ans += lim;
       let v = to;
@@ -119,4 +119,3 @@ export class EdmondsKarp implements WeightedGraph {
     return [ans, flow];
   }
 }
-
